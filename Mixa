@@ -1,0 +1,49 @@
+from tkinter import*
+import random
+
+class Ball:
+    def __init__(self, canvas, color, ball_size, ball_move, interval):
+        self.canvas = canvas
+        self.color = color
+        self.ball_size = ball_size
+        self.ball_move = ball_move
+        self.ball_move_backward = 0 - ball_move
+        self.interval = interval
+        self.ball = canvas.create_oval(20, 15, self.ball_size, self.ball_size, fill=self.color)
+        self.canvas.coords(self.ball, x, y, x + self.ball_size, y + self.ball_size)
+
+    def draw(self):
+        self.__draw_first_slide()
+        
+    def __draw_first_slide(self):
+        self.canvas.move(self.ball, 0, self.ball_move_backward)
+        self.canvas.after(self.interval, self.__draw_second_slide)
+        
+    def __draw_second_slide(self):
+        self.canvas.move(self.ball, self.ball_move_backward, 0)
+        self.canvas.after(self.interval, self.__draw_third_slide)
+        
+    def __draw_third_slide(self):    
+        self.canvas.move(self.ball, 0, self.ball_move)
+        self.canvas.after(self.interval, self.__draw_fourth_slide)
+        
+    def __draw_fourth_slide(self):    
+        self.canvas.move(self.ball, self.ball_move, 0)
+        self.canvas.after(self.interval, self.__draw_first_slide)
+
+x = random.randrange(0, 300)
+y = random.randrange(0, 300)
+ball_size = random.randrange(50, 150)
+colors = ['blue', 'red', 'green','black', 'brown']
+color = random.choice(colors) 
+
+master = Tk()
+master["bg"] = "black"
+master.title("Игра")
+master.resizable(0, 0)
+canvas = Canvas(master, width=500, height=400)
+canvas.pack()
+ball = Ball(canvas, color, ball_size, 40, 10)
+
+ball.draw()
+
